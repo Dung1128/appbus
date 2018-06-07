@@ -1,0 +1,28 @@
+Arguments: 
+  /usr/local/Cellar/node/6.3.1/bin/node /usr/local/Cellar/yarn/1.2.1/libexec/bin/yarn.js add react-native --exact
+
+PATH: 
+  /Applications/MAMP/bin/php/php5.6.10/bin:/Users/mac/.rvm/gems/ruby-2.2.4/bin:/Users/mac/.rvm/gems/ruby-2.2.4@global/bin:/Users/mac/.rvm/rubies/ruby-2.2.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/mac/.rvm/bin:/Users/mac/.rvm/bin
+
+Yarn version: 
+  1.2.1
+
+Node version: 
+  6.9.5
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {"name":"Bus_HSHV","version":"0.0.1","private":true,"scripts":{"start":"node node_modules/react-native/local-cli/cli.js start"}}
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com registry.yarnpkg.com:443
+      at errnoException (dns.js:28:10)
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:76:26)
