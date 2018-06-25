@@ -6,7 +6,6 @@ const stateDefault = {
 const ShiftStartReducer = (state = stateDefault, action) => {
     switch (action.type) {
         case SHIFTSTARTKM:
-            console.log(action);
             return (
                 {
                     ...state,

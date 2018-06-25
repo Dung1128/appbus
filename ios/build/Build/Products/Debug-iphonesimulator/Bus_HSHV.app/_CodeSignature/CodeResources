@@ -50,11 +50,11 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		X0M9tefREG5GnBDIqssw3O+nb0w=
+		9xYIjJ/f1c1E+z08kQV9Tf/qFtw=
 		</data>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<data>
-		zo587HgRgX1pu6XMpXvRvLFud5A=
+		6qIbQMAFJ44erVw4/rHrkWoQSYA=
 		</data>
 		<key>Entypo.ttf</key>
 		<data>
@@ -63,6 +63,10 @@
 		<key>EvilIcons.ttf</key>
 		<data>
 		QZrcvnS7qREj2zspB3XjYvIS8+U=
+		</data>
+		<key>Feather.ttf</key>
+		<data>
+		AiHzjp4t0CEzVCcxbr7QXuznQyM=
 		</data>
 		<key>FontAwesome.ttf</key>
 		<data>
@@ -115,11 +119,15 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		9P/kcOFy9nuUb7JBq9vj0M7Z1N8=
+		4xcQ73uDVue5E+/ylKCTi7YKq0E=
 		</data>
 		<key>Ionicons.ttf</key>
 		<data>
 		D3lWcE/mG0nEHqGiIFEkD3AKK0Q=
+		</data>
+		<key>MaterialCommunityIcons.ttf</key>
+		<data>
+		qsYaaEAlreJgw0cwmpP4T0ugnSE=
 		</data>
 		<key>MaterialIcons.ttf</key>
 		<data>
@@ -127,7 +135,7 @@
 		</data>
 		<key>Octicons.ttf</key>
 		<data>
-		XF4wYBlFFw56fAqk3ggmUtwnNQI=
+		43wPh5FmspBv+00q8kJl9AIbRBc=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -139,11 +147,11 @@
 		</data>
 		<key>PlugIns/Bus_HSHVTests.xctest.dSYM/Contents/Resources/DWARF/Bus_HSHVTests</key>
 		<data>
-		sDAF/gEJyp6nRp9hHabZDyCJz+4=
+		bds8XmcbJH8G6CEWhL6mxwXcV5w=
 		</data>
 		<key>PlugIns/Bus_HSHVTests.xctest/Bus_HSHVTests</key>
 		<data>
-		0aZCZmyY1I6/03dtW8BRNP6QACk=
+		4zrQpdNz72zEzGdlAH6YQRoCYds=
 		</data>
 		<key>PlugIns/Bus_HSHVTests.xctest/Info.plist</key>
 		<data>
@@ -301,22 +309,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			X0M9tefREG5GnBDIqssw3O+nb0w=
+			9xYIjJ/f1c1E+z08kQV9Tf/qFtw=
 			</data>
 			<key>hash2</key>
 			<data>
-			StWajCF5ELC72clGTr/8XZ2iMghEob4U93uXY45GZwY=
+			joTmKDft86lF7k7KwjSRxuTWKY3gWY3khccE2fBbCmw=
 			</data>
 		</dict>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			zo587HgRgX1pu6XMpXvRvLFud5A=
+			6qIbQMAFJ44erVw4/rHrkWoQSYA=
 			</data>
 			<key>hash2</key>
 			<data>
-			3Kex7+T6wLI4hzWVEUdkudUSt6ujxGsjdW4Yq2CwoaA=
+			bCyXigWv+K0SttexwMefVLTZL/bIEy/0zUIdGgVohaU=
 			</data>
 		</dict>
 		<key>Entypo.ttf</key>
@@ -339,6 +347,17 @@
 			<key>hash2</key>
 			<data>
 			J9GohnZmGjoiaVdpUtb3ANoFZEvAMFUR3iO3D3HKVDY=
+			</data>
+		</dict>
+		<key>Feather.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			AiHzjp4t0CEzVCcxbr7QXuznQyM=
+			</data>
+			<key>hash2</key>
+			<data>
+			sse5lKY8HPl6gBWzGq4njD9mmOqvSOduEWdc+dNdrHY=
 			</data>
 		</dict>
 		<key>FontAwesome.ttf</key>
@@ -475,6 +494,17 @@
 			u0dnmwuuuEgbf1HGitM65aUmc2y1CxcXzGD/a2X5CKM=
 			</data>
 		</dict>
+		<key>MaterialCommunityIcons.ttf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			qsYaaEAlreJgw0cwmpP4T0ugnSE=
+			</data>
+			<key>hash2</key>
+			<data>
+			q9ds9276vErG0wDQjAHtvPQadpxhrJDfPQ8UGJDid2g=
+			</data>
+		</dict>
 		<key>MaterialIcons.ttf</key>
 		<dict>
 			<key>hash</key>
@@ -490,11 +520,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			XF4wYBlFFw56fAqk3ggmUtwnNQI=
+			43wPh5FmspBv+00q8kJl9AIbRBc=
 			</data>
 			<key>hash2</key>
 			<data>
-			sw1aNDI0CqTWoFwAl/BoysSnzVrJqfoRSzi3y6/KJCM=
+			IDC914RgQrcm7e1pDO4UjqugvZKBAae3xLoaLztAPMg=
 			</data>
 		</dict>
 		<key>PlugIns/Bus_HSHVTests.xctest.dSYM/Contents/Info.plist</key>
@@ -512,22 +542,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			sDAF/gEJyp6nRp9hHabZDyCJz+4=
+			bds8XmcbJH8G6CEWhL6mxwXcV5w=
 			</data>
 			<key>hash2</key>
 			<data>
-			tDuc9dXvfB3+KSphrqtL8mKW/+f2BhRq7UUsMqyTJH8=
+			eRw1fKzbAnhg5x9AaRE1AnQDuMDpJo50TiT9WK2AKeA=
 			</data>
 		</dict>
 		<key>PlugIns/Bus_HSHVTests.xctest/Bus_HSHVTests</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0aZCZmyY1I6/03dtW8BRNP6QACk=
+			4zrQpdNz72zEzGdlAH6YQRoCYds=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZZNYRCMwgd5+l2YJdLq7KCdrxHYyw/nRDBQY9fH0Iak=
+			P5sXUK2BxRKY2stKZyy150A2Zj5oDk776eBSI9aDecw=
 			</data>
 		</dict>
 		<key>PlugIns/Bus_HSHVTests.xctest/Info.plist</key>

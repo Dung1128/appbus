@@ -4,21 +4,24 @@ import {
     View,
     ScrollView,
     Text,
+    TouchableOpacity,
 } from 'react-native';
 import {
     Card,
     CardItem,
     Spinner,
 } from 'native-base';
-import { ShiftStart } from '../../commons/Screen';
+import { TabManage } from '../../commons/Screen';
+import { GetInfoRoute } from '../../actions/Actions';
+import { connect } from 'react-redux';
+import Accordion from 'react-native-collapsible/Accordion';
+import { LoadingStr, ListTripDt } from '../../commons/Constants';
 
-export default class ListTrips extends Component {
+class ListTrips extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            
-        }
+        this.navigation = this.props.navigation;
     }
 
     render() {
@@ -31,8 +34,12 @@ export default class ListTrips extends Component {
                         style={{ alignItems: 'center' }}
                     >
                         <Spinner />
-                        <Text>Đang tải dữ liệu...</Text>
-                    </View>}
+                        <Text>
+                            {LoadingStr}
+                        </Text>
+                    </View>
+                }
+
                 {!this.props.loading &&
                     this._renderListChuyenDi()
                 }
@@ -44,103 +51,178 @@ export default class ListTrips extends Component {
         let arrListTrips = this.props.arrListTrips,
             html = [],
             htmlChild = [],
-            bg = '#ffffff';
+            SECTIONS = [];
 
         if (!arrListTrips || arrListTrips.length < 1) {
             htmlChild.push(
-                <CardItem key="data_null">
+                <CardItem
+                    key="data_null"
+                >
                     <View>
-                        <Text>Chưa có chuyến nào!</Text>
+                        <Text>{ListTripDt.NoTripsStr}</Text>
                     </View>
                 </CardItem>
             );
         }
 
         for (let i = 0; i < arrListTrips.length; i++) {
-            let dataNot = arrListTrips[i];
-            let did_id = dataNot.did_id;
-            let currentId = dataNot.currentId;
-            let not_chieu_di = dataNot.not_chieu_di;
-
-            if (dataNot.color_loai_xe.trim() != '') {
-                bg = dataNot.color_loai_xe;
-            }
-
-            htmlChild.push(
-                <CardItem
-                    button
-                    key={i}
-                    style={{ shadowOpacity: 0, shadowColor: 'red', backgroundColor: bg }}
-                    onPress={this.checkStartOrHandle.bind(this)}
-                >
-                    <View
-                        style={{ flex: 1, flexDirection: 'row' }}
-                    >
-                        <View
-                            style={{ flex: 3 }}
-                        >
-
-                            <Text
-                                style={{ fontWeight: 'bold' }}
-                            >
-                                {dataNot.did_gio_dieu_hanh + ' ← ' + dataNot.did_gio_xuat_ben_that}
-                            </Text>
-                            {dataNot.bien_kiem_soat != '' && dataNot.bien_kiem_soat != null &&
-                                <Text>
-                                    Biển kiểm soát:
-                                    <Text
-                                        style={{ fontWeight: 'bold' }}
-                                    >
-                                        {dataNot.bien_kiem_soat}
-                                    </Text>
-                                </Text>
-                            }
-                            <Text>
-                                {dataNot.tuy_ten}
-                            </Text>
-                            <Text>
-                                Lái Xe 1:
-                                <Text
-                                    style={{ fontWeight: 'bold' }}
-                                >
-                                    {dataNot.laixe1}
-                                </Text>
-                            </Text>
-                            <Text>
-                                Lái Xe 2:
-                                <Text
-                                    style={{ fontWeight: 'bold' }}
-                                >
-                                    {dataNot.laixe2}
-                                </Text>
-                            </Text>
-                            <Text>
-                                Tiếp viên:
-                                <Text
-                                    style={{ fontWeight: 'bold' }}
-                                >
-                                    {dataNot.tiepvien}
-                                </Text>
-                            </Text>
-                        </View>
-                        <View
-                            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-                        >
-                            {(dataNot.did_loai_xe != 0) && (dataNot.urlImg.trim() != '') &&
-                                <Thumbnail size={60} source={{ uri: dataNot.urlImg }} />
-                            }
-                        </View>
-
-                    </View>
-                </CardItem>
-            );
+            SECTIONS.push({
+                title: arrListTrips[i],
+                content: arrListTrips[i].arrNodes,
+            });
         }
 
-        html.push(<Card key="group_card" style={{ marginTop: 0 }}>{htmlChild}</Card>);
+        html.push(
+            <Card
+                key="group_card"
+                style={{ marginTop: 0 }}
+            >
+                {htmlChild}
+            </Card>
+        );
+
+        html.push(
+            <Card
+                key="scroll_autocomplate1"
+                style={styles.card_body_style}
+            >
+                <Accordion
+                    sections={SECTIONS}
+                    renderHeader={this._renderHeader.bind(this)}
+                    renderContent={this._renderContent.bind(this)}
+                />
+            </Card>
+        );
+
         return html;
     }
 
-    checkStartOrHandle() {
-        this.props.navigation.navigate(ShiftStart);
+    _renderHeader(section) {
+        return (
+            <CardItem
+                bordered={true}
+                style={styles.card_header}
+            >
+                <View
+                    style={styles.view_header}
+                >
+                    <Text>
+                        {section.title.tuy_ten}
+                    </Text>
+                    {section.title.tuy_ma && section.title.tuy_ma.trim() != '' &&
+                        <Text>
+                            {section.title.tuy_ma}
+                        </Text>
+                    }
+                    <Text>
+                        {section.title.tuy_hanh_trinh}
+                    </Text>
+
+                </View>
+            </CardItem>
+        );
+    }
+
+    _renderContent(section) {
+        let html = [],
+            SECTIONS = [];
+
+        for (let i = 0; i < section.content.length; i++) {
+            SECTIONS.push({
+                title: section.content[i],
+                content: section.content[i].arrBusNotGio,
+                data: section.title,
+            });
+        }
+
+        html.push(
+            <View
+                key='scroll'
+                style={styles.view_content}
+            >
+                <ScrollView>
+                    <Accordion
+                        sections={SECTIONS}
+                        renderHeader={this._renderHeaderChild.bind(this)}
+                        renderContent={this._renderContentChild.bind(this)}
+                    />
+                </ScrollView>
+            </View>
+        );
+        return (
+            html
+        );
+    }
+
+    _renderHeaderChild(section) {
+        return (
+            <CardItem
+                bordered={true}
+                style={styles.card_header}
+            >
+                <View
+                    style={styles.view_header}
+                >
+                    <Text>
+                        {section.title.bun_name}
+                    </Text>
+
+                </View>
+            </CardItem>
+        );
+    }
+
+    _renderContentChild(section) {
+        let html = [];
+
+        for (let i = 0; i < section.content.length; i++) {
+            html.push(
+                <View
+                    key={i}
+                    style={styles.view_content}
+                >
+                    <TouchableOpacity
+                        onPress={this.checkStartOrHandle.bind(this, section.title, section.content[i], section.data)}
+                    >
+                        <Text>
+                            {section.content[i].gio_xuat_ben}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+
+        return (
+            html
+        );
+    }
+
+    checkStartOrHandle(title, content, data) {
+        this.navigation.navigate(TabManage);
+        this.props.dispatch(GetInfoRoute({ title, content, data }));
     }
 }
+
+export default connect()(ListTrips);
+
+const styles = StyleSheet.create({
+    view_content: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 10,
+        padding: 10,
+        paddingLeft: 45,
+        margin: 5
+    },
+    view_header: {
+        flex: 1,
+        flexDirection: 'row'
+    },
+    card_header: {
+        shadowOpacity: 0,
+        shadowColor: 'red'
+    },
+    card_body_style: {
+        overflow: 'hidden'
+    },
+})

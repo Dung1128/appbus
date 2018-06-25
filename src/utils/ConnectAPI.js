@@ -1,8 +1,18 @@
 import { domain, cache } from '../commons/Config';
 
 const API_URL = {
-    login: domain + '/api/appdriver/login',
-    // login: domain + '/api/api_adm_dang_nhap.php',
+    api_login: domain + '/api/appdriver/login',
+    api_logout: domain + '/api/appdriver/logout',
+    api_get_menu: domain + '/api/appdriver/menu',
+    api_get_route: domain + '/api/appdriver/get-tuyen',
+    api_get_node: domain + '/api/appdriver/get-bus-not',
+    api_get_bus_stop: domain + '/api/appdriver/get-diem-don-tra',
+    api_get_category_ticket: domain + '/api/appdriver/get-danh-muc-ve',
+    api_save_customer: domain + '/api/appdriver/save-khach-len-xuong',
+    api_get_handover: domain + '/api/appdriver/get-ban-giao',
+    api_get_vehicle: domain + '/api/appdriver/get-xe',
+    api_get_employees: domain + '/api/appdriver/get-nhan-vien',
+    api_save_handover: domain + '/api/appdriver/save-ban-giao',
 }
 
 const API_HEADERS = {
@@ -42,7 +52,19 @@ const fetchData = async (type, param = {}, method = "GET", retry = undefined) =>
         // Method POST
         else if (method == "POST") {
             let formData = new FormData()
-            if (headers["Content-Type"] == "application/json") opts.body = JSON.stringify(param)
+            headers = {
+                "Content-Type": "application/json",
+                "Cache-Control": cache,
+            }
+
+            opts = {
+                method: method,
+                headers: headers,
+            }
+
+            if (headers["Content-Type"] == "application/json") {
+                opts.body = JSON.stringify(param);
+            }
             else {
                 formData.append("data", JSON.stringify(param))
                 opts.body = formData

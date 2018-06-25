@@ -6,11 +6,10 @@ const stateDefault = {
 const AuthenticationReducer = (state = stateDefault, action) => {
     switch (action.type) {
         case AUTH:
-            console.log(action);
             return (
                 {
                     ...state,
-                    userInfo: {}
+                    userInfo: action.userInfo,
                 }
             )
 

@@ -1,2 +1,9 @@
 export const SHIFTSTARTKM = 'SHIFTSTARTKM';
 export const AUTH = 'AUTH';
+export const LISTROUTE = 'LISTROUTE';
+export const SERIALTICKET = 'SERIALTICKET';
+export const BUSSTOP = 'BUSSTOP';
+export const CLEARCACHE = 'CLEARCACHE';
+export const LOGOUT = 'LOGOUT';
+export const DRIVERNAME = 'DRIVERNAME';
+export const VEHICLE = 'VEHICLE';

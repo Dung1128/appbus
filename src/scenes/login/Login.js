@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import {
     View,
-    Image,
-    Platform,
     StyleSheet,
     ScrollView,
     StatusBar
 } from 'react-native';
-
 import {
     InputGroup,
     Icon,
@@ -20,15 +17,13 @@ import { connect } from 'react-redux';
 import { Authentication } from '../../actions/Actions';
 import fetchData from '../../utils/ConnectAPI';
 import StorageHelper from '../../utils/StorageHelper';
-import { ColorHeader, Sign, ErrorAcc, ErrorPass } from '../../commons/Constants'
+import { Sign, ErrorAcc, ErrorPass, ErrorServer, UserInfos, LoadingStr } from '../../commons/Constants'
 import { ListBus } from '../../commons/Screen';
 
-const userInfo = 'userInfo';
+const api_login = 'api_login';
 
 class Login extends Component {
     static navigationOptions = {
-        drawerLabel: 'Đăng xuất',
-        drawerIcon: <Icon name="ios-contact" />,
         headerRight: null,
     }
 
@@ -42,37 +37,56 @@ class Login extends Component {
             password: '',
             loading: true,
         }
+
+        this.navigate = this.props.navigation.navigate;
     }
 
     async componentWillMount() {
-        const { navigate } = this.props.navigation;
-
         try {
-            let dataUser = await StorageHelper.getStore(userInfo);
+            let dataUser = await StorageHelper.getStore(UserInfos);
 
             if (dataUser) {
                 let params = {
                     type: 'checkTokenLogin',
-                    token: dataUser.token
+                    token: dataUser.token,
                 }
 
-                // let data = await fetchData('login', params, 'POST');
-                // if (data.status == 200) {
-                //     // Actions.home({ title: 'Trang Chủ', data: jsonDataUser });
-                // } else {
-                //     this.setState({
-                //         error: true,
-                //         loading: false,
-                //         messageError: 'Tài khoản của bạn đang đăng nhập ở thiết bị khác. Vui lòng đăng nhập lại '
-                //     });
-                // }
-            }
+                let data = await fetchData(api_login, params, 'POST');
 
+                if (data && data.status_code == 200) {
+                    this.props.dispatch(Authentication(dataUser));
+                    this.navigate(ListBus);
+                    this.setState({
+                        loading: false,
+                    });
+                } 
+                else {
+                    if (data) {
+                        this.setState({
+                            error: true,
+                            messageError: data.message,
+                            loading: false,
+                        });
+                    }
+                    else {
+                        this.setState({
+                            error: true,
+                            messageError: ErrorServer,
+                            loading: false,
+                        });
+                    }
+                }
+            }
+            else {
+                this.setState({
+                    loading: false,
+                });
+            }
         } catch (error) {
             this.setState({
-                error: 'true',
+                error: true,
                 loading: false,
-                messageError: 'Lỗi hệ thống. Vui lòng liên hệ với bộ phận Kỹ Thuật.'
+                messageError: ErrorServer
             });
             console.log(error);
         }
@@ -80,11 +94,27 @@ class Login extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <StatusBar hidden={true} />
-                <ScrollView>
-                    {this.renderHtml()}
-                </ScrollView>
+            <View
+                style={styles.container}
+            >
+                <StatusBar
+                    hidden={true}
+                />
+                {this.state.loading &&
+                    <View
+                        style={{ alignItems: 'center' }}
+                    >
+                        <Spinner />
+                        <Text>
+                            {LoadingStr}
+                        </Text>
+                    </View>
+                }
+                {!this.state.loading &&
+                    <ScrollView>
+                        {this.renderHtml()}
+                    </ScrollView>
+                }
             </View>
         );
     }
@@ -192,7 +222,9 @@ class Login extends Component {
                     style={styles.login_button_style}
                     onPress={this.handleLogin.bind(this)}
                 >
-                    <Text style={styles.login_text_style}>
+                    <Text
+                        style={styles.login_text_style}
+                    >
                         {Sign.SignIn}
                     </Text>
                 </Button>
@@ -204,8 +236,6 @@ class Login extends Component {
 
     async handleLogin() {
         try {
-            const { navigate } = this.props.navigation;
-
             if (this.state.username.trim() == '' || this.state.username == null) {
                 this.setState({
                     error: true,
@@ -228,59 +258,52 @@ class Login extends Component {
                 password: this.state.password,
             }
 
-            let data = await fetchData('login', params, 'POST');
-            console.log(data);
+            let data = await fetchData(api_login, params, 'POST');
 
-            if (data) {
-                if (data.status == 200) {
-                    navigate(ListBus);
-                    StorageHelper.setStore(userInfo, data);
-                    this.props.dispatch(Authentication(data));
-                } else {
+            if (data && data.status_code == 200) {
+                StorageHelper.setStore(UserInfos, data);
+                this.props.dispatch(Authentication(data));
+                this.navigate(ListBus);
+                this.setState({
+                    loading: false,
+                });
+            } else {
+                if (data) {
                     this.setState({
                         error: true,
-                        messageError: 'Tài khoản hoặc Mật Khẩu không đúng.'
+                        messageError: data.message,
+                        loading: false,
+                    });
+                }
+                else {
+                    this.setState({
+                        error: true,
+                        messageError: ErrorServer,
+                        loading: false,
                     });
                 }
             }
         } catch (e) {
             this.setState({
                 error: true,
-                messageError: 'Lỗi hệ thống. Vui lòng liên hệ với bộ phận Kỹ Thuật.'
+                messageError: ErrorServer,
+                loading: false,
             });
             console.log(e);
         }
     }
 }
 
-const mapStateToProps = state => {
-    console.log('state login');
-    console.log(state);
-    return {
-        textResult: state,
-    }
-}
-
-export default connect(mapStateToProps)(Login);
+export default connect()(Login);
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5FCFF',
     },
-    header: {
-        backgroundColor: 'rgba(255, 220, 66, 1)',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-    },
-    image_header: {
-        resizeMode: 'contain',
-    },
     login_button_style: {
         marginTop: 10,
         height: 60,
-        backgroundColor: ColorHeader,
     },
     login_text_style: {
         color: 'black',

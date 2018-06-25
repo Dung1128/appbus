@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     Icon,
 } from 'native-base';
@@ -29,9 +30,9 @@ const TabNavigator = createMaterialTopTabNavigator(
                     const { routeName } = navigation.state;
                     let iconName;
                     if (routeName === 'Outbound') {
-                        iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+                        iconName = `ios-arrow-round-forward${focused ? '' : '-outline'}`;
                     } else if (routeName === 'Inbound') {
-                        iconName = `ios-options${focused ? '' : '-outline'}`;
+                        iconName = `ios-arrow-round-back${focused ? '' : '-outline'}`;
                     }
 
                     return <Icon name={iconName} size={25} color={tintColor} />;
@@ -40,6 +41,7 @@ const TabNavigator = createMaterialTopTabNavigator(
         tabBarOptions: {
             activeTintColor: 'red',
             inactiveTintColor: 'gray',
+            showIcon: true,
         },
     }
 );
