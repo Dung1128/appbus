@@ -5,6 +5,7 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
+    Dimensions,
 } from 'react-native';
 import {
     Card,
@@ -16,6 +17,8 @@ import { GetInfoRoute } from '../../actions/Actions';
 import { connect } from 'react-redux';
 import Accordion from 'react-native-collapsible/Accordion';
 import { LoadingStr, ListTripDt } from '../../commons/Constants';
+
+const heightDevice = Dimensions.get('window').height;
 
 class ListTrips extends Component {
     constructor(props) {
@@ -31,7 +34,7 @@ class ListTrips extends Component {
             >
                 {this.props.loading &&
                     <View
-                        style={{ alignItems: 'center' }}
+                        style={styles.load_style}
                     >
                         <Spinner />
                         <Text>
@@ -66,10 +69,12 @@ class ListTrips extends Component {
         }
 
         for (let i = 0; i < arrListTrips.length; i++) {
-            SECTIONS.push({
-                title: arrListTrips[i],
-                content: arrListTrips[i].arrNodes,
-            });
+            if (arrListTrips[i].arrNodes) {
+                SECTIONS.push({
+                    title: arrListTrips[i],
+                    content: arrListTrips[i].arrNodes,
+                });
+            }
         }
 
         html.push(
@@ -138,7 +143,7 @@ class ListTrips extends Component {
         html.push(
             <View
                 key='scroll'
-                style={styles.view_content}
+                style={[styles.view_content, {height: heightDevice}]}
             >
                 <ScrollView>
                     <Accordion
@@ -164,9 +169,17 @@ class ListTrips extends Component {
                     style={styles.view_header}
                 >
                     <Text>
-                        {section.title.bun_name}
+                        {section.title.bun_name} {ListTripDt.Shift} {section.title.did_not_ca}
                     </Text>
-
+                    <Text>
+                        {ListTripDt.Driver} {section.title.lai_xe_text}
+                    </Text>
+                    <Text>
+                        {ListTripDt.Waiter} {section.title.ban_ve_text}
+                    </Text>
+                    <Text>
+                        {ListTripDt.lp} {section.title.xe_text}
+                    </Text>
                 </View>
             </CardItem>
         );
@@ -178,7 +191,7 @@ class ListTrips extends Component {
         for (let i = 0; i < section.content.length; i++) {
             html.push(
                 <View
-                    key={i}
+                    key={'child' + i}
                     style={styles.view_content}
                 >
                     <TouchableOpacity
@@ -198,8 +211,12 @@ class ListTrips extends Component {
     }
 
     checkStartOrHandle(title, content, data) {
-        this.navigation.navigate(TabManage);
-        this.props.dispatch(GetInfoRoute({ title, content, data }));
+        try {
+            this.navigation.navigate(TabManage);
+            this.props.dispatch(GetInfoRoute({ title, content, data }));
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 
@@ -216,13 +233,19 @@ const styles = StyleSheet.create({
     },
     view_header: {
         flex: 1,
-        flexDirection: 'row'
+        // flexDirection: 'row',
     },
     card_header: {
         shadowOpacity: 0,
-        shadowColor: 'red'
+        shadowColor: 'red',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 10,
     },
     card_body_style: {
-        overflow: 'hidden'
+        overflow: 'hidden',
+    },
+    load_style: {
+        alignItems: 'center',
     },
 })

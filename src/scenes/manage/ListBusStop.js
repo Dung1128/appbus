@@ -39,7 +39,8 @@ class ListBusStop extends Component {
             let params = {
                 token: userInfo.token,
                 adm_id: userInfo.adm_id,
-                tuy_id: tripsInfo.tuy_id,
+                tuy_id: tripsInfo.data.tuy_id,
+                dig_id: tripsInfo.content.dig_id,
             }
 
             let data = await fetchData('api_get_bus_stop', params, 'POST');
@@ -52,9 +53,15 @@ class ListBusStop extends Component {
             } else {
                 if (data) {
                     alert(data.message);
+                    this.setState({
+                        loading: false,
+                    });
                 }
                 else {
                     alert(ErrorServer);
+                    this.setState({
+                        loading: false,
+                    });
                 }
             }
         } catch (error) {
@@ -106,7 +113,7 @@ class ListBusStop extends Component {
 
                 {this.state.loading &&
                     <View
-                        style={{ alignItems: 'center' }}
+                        style={styles.load_style}
                     >
                         <Spinner />
                         <Text>
@@ -138,8 +145,8 @@ class ListBusStop extends Component {
 
 const mapStateToProps = state => {
     return {
-        tripsInfo: state.TripsReducer.route.data,
-        userInfo: state.AuthenticationReducer.userInfo,
+        tripsInfo: state.TripsReducer.route,
+        userInfo: state.AuthenticationReducer.userInfo,        
     }
 }
 
@@ -165,5 +172,8 @@ const styles = StyleSheet.create({
     },
     icon_style: {
         fontSize: 30
+    },
+    load_style: {
+        alignItems: 'center',
     },
 });

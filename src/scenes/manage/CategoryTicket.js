@@ -50,9 +50,15 @@ class CategoryTicket extends Component {
             } else {
                 if (data) {
                     alert(data.message);
+                    this.setState({
+                        loading: false,
+                    });
                 }
                 else {
                     alert(ErrorServer);
+                    this.setState({
+                        loading: false,
+                    });
                 }
             }
         } catch (error) {

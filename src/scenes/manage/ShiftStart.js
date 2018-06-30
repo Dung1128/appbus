@@ -14,13 +14,14 @@ import {
     CheckBox,
     ListItem,
     Body,
+    Spinner,
 } from 'native-base';
 import { connect } from 'react-redux';
-import { Shift, ErrorServer } from '../../commons/Constants';
+import { Shift, ErrorServer, LoadingStr } from '../../commons/Constants';
 import { ManageCustomer } from '../../commons/Screen';
 import { InputShiftStart } from '../../actions/Actions';
 import fetchData from '../../utils/ConnectAPI';
-import { CategoryEmployees, CategoryVehicle } from '../../commons/Screen';
+import { CategoryVehicle } from '../../commons/Screen';
 
 class ShiftStart extends Component {
     constructor(props) {
@@ -29,6 +30,7 @@ class ShiftStart extends Component {
             kmStart: '',
             arrHandover: [],
             arrCheckBoxValue: [],
+            loading: true,
         }
     }
 
@@ -40,28 +42,38 @@ class ShiftStart extends Component {
                 dig_id: this.props.InfoTrips.content.dig_id,
             }
 
-            let data = await fetchData('api_get_handover', params, 'POST');
+            let data = await fetchData('api_get_receive_handover', params, 'POST');
+            console.log(data);
 
             if (data && data.status_code == 200) {
-                for (let i = 0; i < data.arrBanGiao.length; i++) {
+                for (let i = 0; i < data.arrNhanBanGiao.length; i++) {
                     let objCheckbox = {
                         bbg_bdg_id: '',
                         bbg_bdg_status: false,
                         bbg_ghi_chu: '',
+                        bbg_ghi_chu_status: false,
                     }
-                    objCheckbox.bbg_bdg_id = data.arrBanGiao[i].bdg_id;
+
+                    objCheckbox.bbg_bdg_id = data.arrNhanBanGiao[i].bdg_id;
                     this.state.arrCheckBoxValue[i] = objCheckbox;
                 }
 
                 this.setState({
-                    arrHandover: data.arrBanGiao,
+                    arrHandover: data.arrNhanBanGiao,
+                    loading: false,
                 });
             } else {
                 if (data) {
                     alert(data.message);
+                    this.setState({
+                        loading: false,
+                    });
                 }
                 else {
                     alert(ErrorServer);
+                    this.setState({
+                        loading: false,
+                    });
                 }
             }
         } catch (error) {
@@ -93,20 +105,32 @@ class ShiftStart extends Component {
                     {Shift.Handover}
                 </Text>
                 <TouchableOpacity
+                    disabled={true}
                     style={styles.employ_touch_style}
-                    onPress={this.selectVehicle.bind(this)}
+                // onPress={this.selectVehicle.bind(this)}
                 >
                     <Text
                         style={styles.employ_text_style}
                     >
-                        {(!this.props.Vehicle || !this.props.Vehicle.bien_kiem_soat || (this.props.Vehicle.bien_kiem_soat == '')) ?
-                            Shift.Vehicle : this.props.Vehicle.bien_kiem_soat}
+                        {this.props.InfoTrips.content.xe_text}
                     </Text>
                 </TouchableOpacity>
                 <View
                     style={styles.view_checkbox_style}
                 >
-                    {this.renderHandover()}
+                    {this.state.loading &&
+                        <View
+                            style={styles.load_style}
+                        >
+                            <Spinner />
+                            <Text>
+                                {LoadingStr}
+                            </Text>
+                        </View>
+                    }
+                    {!this.state.loading &&
+                        this.renderHandover()
+                    }
                 </View>
                 <Button
                     block
@@ -128,16 +152,26 @@ class ShiftStart extends Component {
     }
 
     renderHandover() {
-        let html = [];
+        let html = [],
+            iconName = '',
+            colorIcon = 'white';
 
         for (let i = 0; i < this.state.arrHandover.length; i++) {
+            if (this.state.arrHandover[i].status == 'true') {
+                iconName = 'ios-checkmark';
+                colorIcon = 'green';
+
+            } else {
+                iconName = 'ios-close';
+                colorIcon = 'red';
+            }
+
             let check = false;
             html.push(
                 <View
                     key={i}
                 >
                     <ListItem
-                        key={i}
                         style={styles.listItem_style}
                     >
                         <CheckBox
@@ -147,7 +181,19 @@ class ShiftStart extends Component {
                         <Body>
                             <Text>
                                 {this.state.arrHandover[i].bdg_name}
+                                {this.state.arrHandover[i].ghi_chu.trim() != '' &&
+                                    <Text
+                                        style={styles.child_text_style}
+                                    >
+                                        {'\n'}
+                                        {this.state.arrHandover[i].ghi_chu}
+                                    </Text>
+                                }
                             </Text>
+                            <Icon
+                                name={iconName}
+                                style={[styles.icon_check_style, { color: colorIcon }]}
+                            />
                             <Button
                                 transparent
                                 small
@@ -164,7 +210,7 @@ class ShiftStart extends Component {
                         <Input
                             placeholder={Shift.NoteStr}
                             value={this.state.arrCheckBoxValue[i].bbg_ghi_chu}
-                            onChangeText={(text) => this.inputNote.bind(this, text, i)}
+                            onChangeText={(text) => this.inputNote(text, i)}
                             style={styles.input_note_style}
                         />
                     }
@@ -191,13 +237,29 @@ class ShiftStart extends Component {
         this.setState({ arrCheckBoxValue: this.state.arrCheckBoxValue });
     }
 
-    handleInputKMStart() {
+    async handleInputKMStart() {
         try {
-            this.props.dispatch(InputShiftStart(this.state.kmStart));
-            // send to server
+            let params = {
+                token: this.props.userInfo.token,
+                adm_id: this.props.userInfo.adm_id,
+                bbg_dig_id: this.props.InfoTrips.content.dig_id,
+                bbg_xe_id: this.props.InfoTrips.content.xe_id,
+                dataBanGiao: this.state.arrCheckBoxValue,
+                km_dau_ca: this.state.kmStart,
+            }
 
-            //
-            this.props.navigation.navigate(ManageCustomer);
+            let data = await fetchData('api_save_receive_handover', params, 'POST');
+
+            if (data && data.status_code == 200) {
+                this.props.navigation.navigate(ManageCustomer);
+            } else {
+                if (data) {
+                    alert(data.message);
+                }
+                else {
+                    alert(ErrorServer);
+                }
+            }
         } catch (error) {
             console.log(error);
         }
@@ -271,5 +333,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         marginHorizontal: 10,
+    },
+    icon_check_style: {
+        top: 0,
+        right: 50,
+        position: 'absolute',
+    },
+    child_text_style: {
+        color: 'red',
+        fontSize: 12,
+    },
+    load_style: {
+        alignItems: 'center',
     },
 });

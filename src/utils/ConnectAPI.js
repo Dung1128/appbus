@@ -13,6 +13,8 @@ const API_URL = {
     api_get_vehicle: domain + '/api/appdriver/get-xe',
     api_get_employees: domain + '/api/appdriver/get-nhan-vien',
     api_save_handover: domain + '/api/appdriver/save-ban-giao',
+    api_get_receive_handover: domain + '/api/appdriver/get-nhan-ban-giao',
+    api_save_receive_handover: domain + '/api/appdriver/save-nhan-ban-giao',
 }
 
 const API_HEADERS = {
@@ -71,7 +73,6 @@ const fetchData = async (type, param = {}, method = "GET", retry = undefined) =>
             }
         }
 
-        console.log(url);
         // Trả về dữ liệu json
         let response = await fetch(url, opts)
         let responseJson = await response.json()

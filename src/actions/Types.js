@@ -7,3 +7,4 @@ export const CLEARCACHE = 'CLEARCACHE';
 export const LOGOUT = 'LOGOUT';
 export const DRIVERNAME = 'DRIVERNAME';
 export const VEHICLE = 'VEHICLE';
+export const MENU = 'MENU';

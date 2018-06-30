@@ -40,7 +40,6 @@ class CategoryEmployees extends Component {
             }
 
             let dataDriver = await fetchData('api_get_employees', paramsDriver, 'POST');
-            console.log(dataDriver);
 
             if (dataDriver && dataDriver.status_code == 200) {
                 this.setState({
@@ -51,9 +50,15 @@ class CategoryEmployees extends Component {
             } else {
                 if (dataDriver) {
                     alert(dataDriver.message);
+                    this.setState({
+                        loading: false,
+                    });
                 }
                 else {
                     alert(ErrorServer);
+                    this.setState({
+                        loading: false,
+                    });
                 }
             }
         } catch (error) {

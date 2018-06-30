@@ -3,6 +3,8 @@ import { SERIALTICKET, BUSSTOP, CLEARCACHE, DRIVERNAME, VEHICLE } from '../actio
 const stateDefault = {
     categoryTicket: '',
     busStop: '',
+    driver: '',
+    vehicle: '',
 }
 
 const ManageCustomerReducer = (state = stateDefault, action) => {

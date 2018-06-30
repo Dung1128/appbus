@@ -39,7 +39,6 @@ class CategoryVehicle extends Component {
             }
 
             let dataVehicle = await fetchData('api_get_vehicle', paramsVehicle, 'POST');
-            console.log(dataVehicle);
 
             if (dataVehicle && dataVehicle.status_code == 200) {
                 this.setState({
@@ -49,9 +48,15 @@ class CategoryVehicle extends Component {
             } else {
                 if (dataVehicle) {
                     alert(dataVehicle.message);
+                    this.setState({
+                        loading: false,
+                    });
                 }
                 else {
                     alert(ErrorServer);
+                    this.setState({
+                        loading: false,
+                    });
                 }
             }
         } catch (error) {

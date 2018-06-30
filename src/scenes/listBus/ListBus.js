@@ -108,54 +108,46 @@ class ListBus extends Component {
         let params = {
             token: userInfo.token,
             adm_id: userInfo.adm_id,
+            day: this.state.fullDate,
         }
 
-        let data = await fetchData('api_get_route', params, 'POST');
+        // let data = await fetchData('api_get_route', params, 'POST');
+        let data = await fetchData('api_get_node', params, 'POST');
 
         if (data && data.status_code == 200) {
             for (let i = 0; i < data.arrTuyen.length; i++) {
                 arrOutbound[i] = Object.assign({}, data.arrTuyen[i]);
                 arrInbound[i] = Object.assign({}, data.arrTuyen[i]);
 
-                let paramsNote = {
-                    token: userInfo.token,
-                    adm_id: userInfo.adm_id,
-                    tuy_id: data.arrTuyen[i].tuy_id,
-                    day: this.state.fullDate,
-                }
+                for (let property in data.arrBusNot) {
+                    if (property == data.arrTuyen[i].tuy_id) {
+                        let dataNodes = data.arrBusNot[property];
 
-                let dataNodes = await fetchData('api_get_node', paramsNote, 'POST');
+                        if (dataNodes) {
+                            arrOutbound[i].arrNodes = [];
+                            arrInbound[i].arrNodes = [];
 
-                if (dataNodes && dataNodes.status_code == 200) {
-                    arrOutbound[i].arrNodes = [];
-                    arrInbound[i].arrNodes = [];
+                            for (let j = 0; j < dataNodes.length; j++) {
+                                arrOutbound[i].arrNodes[j] = Object.assign({}, dataNodes[j]);
+                                arrInbound[i].arrNodes[j] = Object.assign({}, dataNodes[j]);
 
-                    for (let j = 0; j < dataNodes.arrBusNot.length; j++) {
-                        arrOutbound[i].arrNodes[j] = Object.assign({}, dataNodes.arrBusNot[j]);
-                        arrInbound[i].arrNodes[j] = Object.assign({}, dataNodes.arrBusNot[j]);
+                                let arrOutboundBus = [],
+                                    arrInboundBus = [];
 
-                        let arrOutboundBus = [],
-                            arrInboundBus = [];
+                                for (let k = 0; k < dataNodes[j].arrBusNotGio.length; k++) {
+                                    if (dataNodes[j].arrBusNotGio[k].chieu_di == 1) {
+                                        arrOutboundBus.push(dataNodes[j].arrBusNotGio[k]);
+                                    }
 
-                        for (let k = 0; k < dataNodes.arrBusNot[j].arrBusNotGio.length; k++) {
-                            if (dataNodes.arrBusNot[j].arrBusNotGio[k].chieu_di == 1) {
-                                arrOutboundBus.push(dataNodes.arrBusNot[j].arrBusNotGio[k]);
-                            }
+                                    if (dataNodes[j].arrBusNotGio[k].chieu_di == 2) {
+                                        arrInboundBus.push(dataNodes[j].arrBusNotGio[k]);
+                                    }
+                                }
 
-                            if (dataNodes.arrBusNot[j].arrBusNotGio[k].chieu_di == 2) {
-                                arrInboundBus.push(dataNodes.arrBusNot[j].arrBusNotGio[k]);
+                                arrOutbound[i].arrNodes[j].arrBusNotGio = arrOutboundBus;
+                                arrInbound[i].arrNodes[j].arrBusNotGio = arrInboundBus;
                             }
                         }
-
-                        arrOutbound[i].arrNodes[j].arrBusNotGio = arrOutboundBus;
-                        arrInbound[i].arrNodes[j].arrBusNotGio = arrInboundBus;
-                    }
-                } else {
-                    if (dataNodes) {
-                        alert(dataNodes.message);
-                    }
-                    else {
-                        alert(ErrorServer);
                     }
                 }
             }
@@ -168,9 +160,15 @@ class ListBus extends Component {
         } else {
             if (data) {
                 alert(data.message);
+                this.setState({
+                    loading: false,
+                });
             }
             else {
                 alert(ErrorServer);
+                this.setState({
+                    loading: false,
+                });
             }
         }
     }

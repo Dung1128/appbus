@@ -43,3 +43,8 @@ export const ClearCache = () => ({
 export const Logout = () => ({
     type: types.LOGOUT,
 })
+
+export const GetMenu = menu => ({
+    type: types.MENU,
+    menu,
+})

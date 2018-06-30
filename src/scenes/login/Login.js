@@ -14,7 +14,7 @@ import {
     Spinner,
 } from 'native-base';
 import { connect } from 'react-redux';
-import { Authentication } from '../../actions/Actions';
+import { Authentication, GetMenu } from '../../actions/Actions';
 import fetchData from '../../utils/ConnectAPI';
 import StorageHelper from '../../utils/StorageHelper';
 import { Sign, ErrorAcc, ErrorPass, ErrorServer, UserInfos, LoadingStr } from '../../commons/Constants'
@@ -56,10 +56,29 @@ class Login extends Component {
                 if (data && data.status_code == 200) {
                     this.props.dispatch(Authentication(dataUser));
                     this.navigate(ListBus);
+
+                    let paramsMenu = {
+                        token: dataUser.token,
+                        adm_id: dataUser.adm_id,
+                    }
+
+                    let dataMenu = await fetchData('api_get_menu', paramsMenu, 'POST');
+
+                    if (dataMenu && dataMenu.status_code == 200) {
+                        this.props.dispatch(GetMenu(dataMenu.arrMenu));
+                    } else {
+                        if (dataMenu) {
+                            alert(dataMenu.message);
+                        }
+                        else {
+                            alert(ErrorServer);
+                        }
+                    }
+
                     this.setState({
                         loading: false,
                     });
-                } 
+                }
                 else {
                     if (data) {
                         this.setState({
@@ -102,7 +121,7 @@ class Login extends Component {
                 />
                 {this.state.loading &&
                     <View
-                        style={{ alignItems: 'center' }}
+                        style={styles.load_style}
                     >
                         <Spinner />
                         <Text>
@@ -264,6 +283,25 @@ class Login extends Component {
                 StorageHelper.setStore(UserInfos, data);
                 this.props.dispatch(Authentication(data));
                 this.navigate(ListBus);
+
+                let paramsMenu = {
+                    token: data.token,
+                    adm_id: data.adm_id,
+                }
+
+                let dataMenu = await fetchData('api_get_menu', paramsMenu, 'POST');
+
+                if (dataMenu && dataMenu.status_code == 200) {
+                    this.props.dispatch(GetMenu(dataMenu.arrMenu));
+                } else {
+                    if (dataMenu) {
+                        alert(dataMenu.message);
+                    }
+                    else {
+                        alert(ErrorServer);
+                    }
+                }
+
                 this.setState({
                     loading: false,
                 });
@@ -326,5 +364,8 @@ const styles = StyleSheet.create({
     },
     icon_style: {
         color: 'red',
-    }
+    },
+    load_style: {
+        alignItems: 'center',
+    },
 });

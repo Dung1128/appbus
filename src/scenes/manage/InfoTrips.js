@@ -26,7 +26,13 @@ class InfoTrips extends Component {
                     bordered={true}
                     style={styles.cardItem_style}
                 >
-                    {Info &&
+
+                    <View
+                        style={styles.view_style}
+                    >
+                        {this.renderInfo()}
+                    </View>
+                    {/* {Info &&
                         <View
                             style={styles.view_style}
                         >
@@ -91,10 +97,101 @@ class InfoTrips extends Component {
                                 </Text>
                             }
                         </View>
-                    }
+                    } */}
                 </CardItem>
             </Card>
         );
+    }
+
+    renderInfo() {
+        let html = [];
+        let Info = this.props.InfoTrips;
+
+        if (Info) {
+            if (Info.data && Info.content) {
+                html.push(
+                    <Text
+                        key='bst'
+                        style={styles.bold}
+                    >
+                        {Info.data.tuy_ten}  {Info.content.gio_xuat_ben}
+                    </Text>
+                );
+            }
+
+            if (Info.title) {
+                html.push(
+                    <Text
+                        key='bn'
+                        style={styles.bold}
+                    >
+                        {Info.title.bun_name}
+                    </Text>
+                );
+            }
+
+            if (Info.data &&
+                Info.data.tuy_hanh_trinh &&
+                Info.data.tuy_hanh_trinh.trim() != '') {
+                html.push(
+                    <Text
+                        key='trip'
+                        style={styles.bold}
+                    >
+                        {Info.data.tuy_hanh_trinh}
+                    </Text>
+                );
+            }
+
+            if (Info.content &&
+                Info.content.xe_text &&
+                Info.content.xe_text.trim() != '') {
+                html.push(
+                    <Text
+                        key='vehicle'
+                        style={styles.bold}
+                    >
+                        {Info.content.xe_text}
+                    </Text>
+                );
+            }
+
+            if (Info.content &&
+                Info.content.lai_xe_text &&
+                Info.content.lai_xe_text.trim() != '') {
+                html.push(
+                    <Text
+                        key='driver'
+                    >
+                        {InfoTripsStr.Driver}
+                        <Text
+                            style={styles.bold}
+                        >
+                            {Info.content.lai_xe_text}
+                        </Text>
+                    </Text>
+                );
+            }
+
+            if (Info.content &&
+                Info.content.ban_ve_text &&
+                Info.content.ban_ve_text.trim() != '') {
+                html.push(
+                    <Text
+                        key='waiter'
+                    >
+                        {InfoTripsStr.Waiter}
+                        <Text
+                            style={styles.bold}
+                        >
+                            {Info.content.ban_ve_text}
+                        </Text>
+                    </Text>
+                );
+            }
+        }
+
+        return html;
     }
 }
 

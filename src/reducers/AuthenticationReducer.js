@@ -1,4 +1,4 @@
-import { AUTH } from '../actions/Types';
+import { AUTH, MENU } from '../actions/Types';
 
 const stateDefault = {
     userInfo: {}
@@ -10,6 +10,14 @@ const AuthenticationReducer = (state = stateDefault, action) => {
                 {
                     ...state,
                     userInfo: action.userInfo,
+                }
+            )
+
+        case MENU:
+            return (
+                {
+                    ...state,
+                    menu: action.menu,
                 }
             )
 

@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
     View,
     Image,
+    ScrollView,
 } from "react-native";
 import {
     Header,
@@ -33,6 +34,9 @@ class DrawerMenu extends Component {
     constructor(props) {
         super(props);
         this.signgout = this.signgout.bind(this);
+        this.state = {
+            arrMenu: [],
+        };
     }
 
     render() {
@@ -49,17 +53,7 @@ class DrawerMenu extends Component {
                 </Header>
                 <TouchableOpacity
                     style={styles.menuItem}
-                    onPress={this.signgout}
-                >
-                    <Text
-                        style={styles.menuItemText}
-                    >
-                        {MenuSreen.SingOut}
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.menuItem}
-                    // onPress={this.logout}
+                // onPress={this.logout}
                 >
                     <Text
                         style={styles.menuItemText}
@@ -69,7 +63,7 @@ class DrawerMenu extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.menuItem}
-                    // onPress={this.logout}
+                // onPress={this.logout}
                 >
                     <Text
                         style={styles.menuItemText}
@@ -79,7 +73,7 @@ class DrawerMenu extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.menuItem}
-                    // onPress={this.logout}
+                // onPress={this.logout}
                 >
                     <Text
                         style={styles.menuItemText}
@@ -87,8 +81,72 @@ class DrawerMenu extends Component {
                         {MenuSreen.UpdateExcept}
                     </Text>
                 </TouchableOpacity>
+
+                {this.renderMenu()}
+                <View
+                    style={styles.version_style}
+                >
+                    <Text
+                        style={[styles.text, { color: '#ccc' }]
+                        }>
+                        {'Version: 1.0'}
+                    </Text>
+                </View>
             </View>
         );
+    }
+
+    renderMenu() {
+        let html = [];
+
+        if (this.props.arrMenu) {
+            html.push(
+                <ScrollView
+                    style={{ flex: 1 }}
+                    key='menu'
+                >
+                    {this.props.arrMenu[0].status &&
+                        <TouchableOpacity
+                            style={styles.menuItem}
+                        // onPress={this.logout}
+                        >
+                            <Text
+                                style={styles.menuItemText}
+                            >
+                                {this.props.arrMenu[0].title}
+                            </Text>
+                        </TouchableOpacity>
+                    }
+                    {this.props.arrMenu[1].status &&
+                        <TouchableOpacity
+                            style={styles.menuItem}
+                        // onPress={this.logout}
+                        >
+                            <Text
+                                style={styles.menuItemText}
+                            >
+                                {this.props.arrMenu[1].title}
+                            </Text>
+                        </TouchableOpacity>
+                    }
+                    {this.props.arrMenu[2].status &&
+                        <TouchableOpacity
+                            style={styles.menuItem}
+                            onPress={this.signgout}
+                        >
+                            <Text
+                                style={styles.menuItemText}
+                            >
+                                {this.props.arrMenu[2].title}
+                            </Text>
+                        </TouchableOpacity>
+                    }
+                </ScrollView>
+            );
+
+        }
+
+        return html;
     }
 
     async signgout() {
@@ -131,6 +189,10 @@ const styles = StyleSheet.create({
     menuItemText: {
         fontSize: 20
     },
+    version_style: {
+        alignItems: 'center',
+        marginBottom: 10,
+    },
 });
 
 DrawerMenu.defaultProps = {};
@@ -140,6 +202,7 @@ DrawerMenu.propTypes = {};
 const mapStateToProps = state => {
     return {
         userInfo: state.AuthenticationReducer.userInfo,
+        arrMenu: state.AuthenticationReducer.menu,
     }
 }
 

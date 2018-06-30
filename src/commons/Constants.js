@@ -1,6 +1,7 @@
 module.exports = {
     ColorHeader: '#474845',
     LoadingStr: 'Đang tải dữ liệu...',
+    Processcing: 'Đang xử lý...',
     Sign: {
         Account: 'Tên đăng nhập',
         Pass: 'Mật khẩu',
@@ -21,6 +22,7 @@ module.exports = {
         DriverName: 'Chọn lái xe',
         Vehicle: 'Chọn xe',
         NoteStr: 'Ghi chú',
+        WarnVehicle: 'Vui lòng chọn xe',
     },
     ListBusConts: {
         DatePickerConfirm: 'Chọn',
@@ -29,11 +31,15 @@ module.exports = {
     },
     ListTripDt: {
         NoTripsStr: 'Chưa có chuyến nào!',
+        Shift: '- Ca',
+        Driver: 'Lái xe:',
+        Waiter: 'Tiếp viên:',
+        lp: 'BKS',
     },
     ManageCus: {
         selectLocationStr: 'Chọn địa điểm',
         selectCategoryTicketStr: 'Chọn danh mục vé',
-        InputSerialStr: 'Chốt serial vé',
+        InputSerialStr: 'Chốt seri vé',
         TotalCusInStr: 'Tổng khách lên',
         CusInTicketDailyStr: 'Tổng vé lượt lên xe',
         TotalCusOutStr: 'Tổng khách xuống',
